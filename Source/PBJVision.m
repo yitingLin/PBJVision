@@ -684,12 +684,20 @@ typedef NS_ENUM(GLint, PBJVisionUniformLocationTypes)
         _autoFreezePreviewDuringCapture = YES;
         _usesApplicationAudioSession = NO;
 
-        // Average bytes per second based on video dimensions
-        // lower the bitRate, higher the compression
-        _videoBitRate = PBJVideoBitRate640x480;
+        
+        // init
+        
+        _cameraMode = PBJCameraModeVideo;
+        _cameraDevice = PBJCameraDeviceFront;
+        _cameraOrientation = PBJCameraOrientationPortrait;
+        _focusMode = PBJFocusModeContinuousAutoFocus;
+        _outputFormat = PBJOutputFormatPreset;
+        _flags.videoRenderingEnabled = YES;
+        _captureSessionPreset = AVCaptureSessionPreset1280x720;
+        _audioBitRate = 32000;
+        _videoBitRate = 1000000;
+        _additionalCompressionProperties = @{AVVideoProfileLevelKey : AVVideoProfileLevelH264MainAutoLevel};
 
-        // default audio/video configuration
-        _audioBitRate = 64000;
         
         // default flags
         _flags.thumbnailEnabled = YES;
@@ -762,16 +770,9 @@ typedef void (^PBJVisionBlock)();
 
 - (void)_commitBlock:(PBJVisionBlock)block
 {
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     [_captureSession beginConfiguration];
-    [device lockForConfiguration:nil];
-    
     block();
-    
-    [device unlockForConfiguration];
-    
     [_captureSession commitConfiguration];
-    [_captureSession startRunning];
 }
 
 #pragma mark - camera
