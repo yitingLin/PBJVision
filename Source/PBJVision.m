@@ -763,12 +763,11 @@ typedef void (^PBJVisionBlock)();
 - (void)_commitBlock:(PBJVisionBlock)block
 {
     [_captureSession beginConfiguration];
-//    block();
+    _executeBlockOnMainQueue(block());
     [_captureSession commitConfiguration];
 }
 
 #pragma mark - camera
-
 // only call from the session queue
 - (void)_setupCamera
 {
