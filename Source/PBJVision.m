@@ -762,11 +762,16 @@ typedef void (^PBJVisionBlock)();
 
 - (void)_commitBlock:(PBJVisionBlock)block
 {
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     [_captureSession beginConfiguration];
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        block();
-    });
+    [device lockForConfiguration:nil];
+    
+    block();
+    
+    [device unlockForConfiguration];
+    
     [_captureSession commitConfiguration];
+    [_captureSession startRunning];
 }
 
 #pragma mark - camera
