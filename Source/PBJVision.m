@@ -763,7 +763,7 @@ typedef void (^PBJVisionBlock)();
 - (void)_commitBlock:(PBJVisionBlock)block
 {
     [_captureSession beginConfiguration];
-    block();
+//    block();
     [_captureSession commitConfiguration];
 }
 
